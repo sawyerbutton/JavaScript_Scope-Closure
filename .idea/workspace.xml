@@ -20,8 +20,8 @@
         <entry file="file://$PROJECT_DIR$/PITCHME.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="397">
-                <caret line="573" lean-forward="true" selection-start-line="573" selection-end-line="573" />
+              <first_editor relative-caret-position="382">
+                <caret line="896" column="41" selection-start-line="896" selection-start-column="41" selection-end-line="896" selection-end-column="41" />
               </first_editor>
               <second_editor />
             </state>
@@ -111,12 +111,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1527651644130</updated>
-      <workItem from="1527651645634" duration="6404000" />
+      <workItem from="1527651645634" duration="8853000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6404000" />
+    <option name="totallyTimeSpent" value="8853000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -161,8 +161,8 @@
     <entry file="file://$PROJECT_DIR$/PITCHME.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="397">
-            <caret line="573" lean-forward="true" selection-start-line="573" selection-end-line="573" />
+          <first_editor relative-caret-position="382">
+            <caret line="896" column="41" selection-start-line="896" selection-start-column="41" selection-end-line="896" selection-end-column="41" />
           </first_editor>
           <second_editor />
         </state>

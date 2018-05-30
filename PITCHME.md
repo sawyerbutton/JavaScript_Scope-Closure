@@ -239,9 +239,9 @@ foo( "var a = 2" );
 ---
 ## other ways
 ```javascript
-setTimeout(s,..)
-setInterval(s,..)
-new Function(..,s)
+setTimeout(eval(),0);
+setInterval(eval(),1000);
+new Function('example',eval());
 ```
 ---
 ## with-1
@@ -487,7 +487,7 @@ if (foo) {
 	const b = 3; // 存在于包含它的`if`作用域中
 
 	a = 3; // 没问题！
-	b = 4; // 错误！
+	// b = 4; // 错误！
 }
 
 console.log( a ); // 3
@@ -569,6 +569,331 @@ else {
 ---
 ### Conclusion
 - 在同一个作用域内的重复定义是一个十分差劲儿的主意，而且经常会导致令人困惑的结果。
-
+---
 ### Closure
+- 什么是闭包
+- 闭包就是函数能够记住并访问它的词法作用域，即使当这个函数在它的词法作用域之外执行时。
 
+---
+### Easy Example
+
+```javascript
+function foo() {
+	var a = 2;
+
+	function bar() {
+		console.log( a ); // 2
+	}
+
+	bar();
+}
+
+foo();
+```
+- Is this a closure?
+- 从纯粹的学院派角度讲，上面的代码段被认为是函数 bar() 在函数 foo() 的作用域上有一个 闭包（而且实际上，它甚至对其他的作用域也可以访问，比如这个例子中的全局作用域）
+
+---
+### expose the Closure
+
+```javascript
+function foo() {
+	var a = 2;
+	function bar() {
+		console.log( a );
+	}
+	return bar;
+}
+var baz = foo();
+baz(); //This is a closure
+```
+- foo() 被执行之后，一般说来我们会期望 foo() 的整个内部作用域都将消失，因为我们知道 引擎 启用了 垃圾回收器 在内存不再被使用时来回收它们。因为很显然 foo() 的内容不再被使用了，所以看起来它们很自然地应该被认为是 消失了
+---
+### Magic
+- foo() 内部的作用域实际上 依然 “在使用”，因此将不会消失。谁在使用它？函数 bar() 本身
+- 依赖于它被声明的位置，bar() 拥有一个词法作用域闭包覆盖着 foo() 的内部作用域，闭包为了能使 bar() 在以后任意的时刻可以引用这个作用域而保持它的存在
+- bar() 依然拥有对那个作用域的引用，而这个引用称为闭包
+---
+### Usage of closure-1
+```javascript
+function foo() {
+	var a = 2;
+	function baz() {
+		console.log( a ); // 2
+	}
+	bar( baz );
+}
+function bar(fn) {
+	fn(); //This is a closure
+}
+```
+---
+### Usage of Closure-2
+```javascript
+    var fn;
+    
+    function foo() {
+    	var a = 2;
+    
+    	function baz() {
+    		console.log( a );
+    	}
+    
+    	fn = baz; // 将`baz`赋值给一个全局变量
+    }
+    
+    function bar() {
+    	fn(); // 看妈妈，我看到闭包了！
+    }
+    
+    foo();
+    
+    bar(); // 2
+```
+---
+### reality of Closure
+```javascript
+function wait(message) {
+
+	setTimeout( function timer(){
+		console.log( message );
+	}, 1000 );
+
+}
+
+wait( "Hello, closure!" );
+```
+---
+### Loop and Closure
+```javascript
+for (var i=1; i<=5; i++) {
+	setTimeout( function timer(){
+		console.log( i );
+	}, i*1000 );
+}
+```
+---
+### Try this
+```javascript
+for (var i=1; i<=5; i++) {
+	(function(){
+		setTimeout( function timer(){
+			console.log( i );
+		}, i*1000 );
+	})();
+}
+```
+---
+### Now
+```javascript
+for (var i=1; i<=5; i++) {
+	(function(){
+		var j = i; //<= insert a j to represent i
+		setTimeout( function timer(){
+			console.log( j );
+		}, j*1000 );
+	})();
+}
+```
+---
+### using block - Let
+```javascript
+for (var i=1; i<=5; i++) {
+	let j = i; // 利用let限制了作用域
+	setTimeout( function timer(){
+		console.log( j );
+	}, j*1000 );
+}
+```
+---
+### Better way
+```javascript
+for (let i=1; i<=5; i++) {
+	setTimeout( function timer(){
+		console.log( i );
+	}, i*1000 );
+}
+```
+---
+### Module and Closure
+```javascript
+function foo() {
+	var something = "cool";
+	var another = [1, 2, 3];
+
+	function doSomething() {
+		console.log( something );
+	}
+
+	function doAnother() {
+		console.log( another.join( " ! " ) );
+	}
+}
+```
+---
+### expose the closure
+```javascript
+function CoolModule() {
+	var something = "cool";
+	var another = [1, 2, 3];
+
+	function doSomething() {
+		console.log( something );
+	}
+
+	function doAnother() {
+		console.log( another.join( " ! " ) );
+	}
+
+	return {
+		doSomething: doSomething,
+		doAnother: doAnother
+	};
+}
+
+var foo = CoolModule();
+
+foo.doSomething(); // cool
+foo.doAnother(); // 1 ! 2 ! 3
+```
+---
+### singleton
+```javascript
+var foo = (function CoolModule() {
+	var something = "cool";
+	var another = [1, 2, 3];
+
+	function doSomething() {
+		console.log( something );
+	}
+
+	function doAnother() {
+		console.log( another.join( " ! " ) );
+	}
+
+	return {
+		doSomething: doSomething,
+		doAnother: doAnother
+	};
+})();
+
+foo.doSomething(); // cool
+foo.doAnother(); // 1 ! 2 ! 3
+```
+---
+### modules are function basically
+```javascript
+function CoolModule(id) {
+	function identify() {
+		console.log( id );
+	}
+
+	return {
+		identify: identify
+	};
+}
+
+var foo1 = CoolModule( "foo 1" );
+var foo2 = CoolModule( "foo 2" );
+
+foo1.identify(); // "foo 1"
+foo2.identify(); // "foo 2"
+```
+---
+### Modern Modules
+```javascript
+var MyModules = (function Manager() {
+	var modules = {};
+
+	function define(name, deps, impl) {
+		for (var i=0; i<deps.length; i++) {
+			deps[i] = modules[deps[i]];
+		}
+		modules[name] = impl.apply( impl, deps );
+	}
+
+	function get(name) {
+		return modules[name];
+	}
+
+	return {
+		define: define,
+		get: get
+	};
+})();
+```
+- modules[name] = impl.apply(impl, deps) 这为一个模块调用了它的定义的包装函数（传入所有依赖），并将返回值，也就是模块的API，存储到一个用名称追踪的内部模块列表中
+---
+### Modern Modules
+```javascript
+MyModules.define( "bar", [], function(){
+	function hello(who) {
+		return "Let me introduce: " + who;
+	}
+
+	return {
+		hello: hello
+	};
+} );
+
+MyModules.define( "foo", ["bar"], function(bar){
+	var hungry = "hippo";
+
+	function awesome() {
+		console.log( bar.hello( hungry ).toUpperCase() );
+	}
+
+	return {
+		awesome: awesome
+	};
+} );
+
+var bar = MyModules.get( "bar" );
+var foo = MyModules.get( "foo" );
+
+console.log(
+	bar.hello( "hippo" )
+); // Let me introduce: hippo
+
+foo.awesome(); // LET ME INTRODUCE: HIPPO
+```
+---
+### Modules in ES6
+- ES6 为模块的概念增加了头等的语法支持
+- ES6 将一个文件视为一个独立的模块
+- 每个模块可以导入其他的模块或者特定的API成员，也可以导出它们自己的公有API成员
+- ES6 模块API是静态的（这些API不会在运行时改变）。因为编译器知道它，它可以在（文件加载和）编译期间检查一个指向被导入模块的成员的引用是否 实际存在。如果API引用不存在，编译器就会在编译时抛出一个“早期”错误，而不是等待传统的动态运行时解决方案
+---
+### Example-1
+```javascript
+//bar.js
+function hello(who) {
+	return "Let me introduce: " + who;
+}
+export hello;
+```
+```javascript
+//foo.js
+import hello from "bar";
+var hungry = "hippo";
+function awesome() {
+	console.log(
+		hello( hungry ).toUpperCase()
+	);
+}
+export awesome;
+```
+---
+### Example-2
+```javascript
+// 导入`foo`和`bar`整个模块
+module foo from "foo";
+module bar from "bar";
+
+console.log(
+	bar.hello( "rhino" )
+); // Let me introduce: rhino
+
+foo.awesome(); // LET ME INTRODUCE: HIPPO
+```
+- 在 模块文件 内部的内容被视为像是包围在一个作用域闭包中，就像早先看到的使用函数闭包的模块那样

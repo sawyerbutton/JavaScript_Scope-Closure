@@ -20,8 +20,8 @@
         <entry file="file://$PROJECT_DIR$/PITCHME.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="337">
-                <caret line="291" column="18" selection-start-line="291" selection-start-column="18" selection-end-line="291" selection-end-column="18" />
+              <first_editor relative-caret-position="281">
+                <caret line="485" column="17" lean-forward="true" selection-start-line="485" selection-start-column="17" selection-end-line="485" selection-end-column="17" />
               </first_editor>
               <second_editor />
             </state>
@@ -29,6 +29,11 @@
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>儿</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -106,12 +111,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1527651644130</updated>
-      <workItem from="1527651645634" duration="4559000" />
+      <workItem from="1527651645634" duration="5725000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4559000" />
+    <option name="totallyTimeSpent" value="5725000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -156,8 +161,8 @@
     <entry file="file://$PROJECT_DIR$/PITCHME.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="337">
-            <caret line="291" column="18" selection-start-line="291" selection-start-column="18" selection-end-line="291" selection-end-column="18" />
+          <first_editor relative-caret-position="281">
+            <caret line="485" column="17" lean-forward="true" selection-start-line="485" selection-start-column="17" selection-end-line="485" selection-end-column="17" />
           </first_editor>
           <second_editor />
         </state>

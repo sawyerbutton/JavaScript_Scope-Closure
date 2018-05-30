@@ -294,4 +294,200 @@ console.log( a );
 ---
 ### Bad Points
 - JavaScript 引擎 在编译阶段期行许多性能优化工作。其中的一些优化原理都归结为实质上在进行词法分析时可以静态地分析代码，并提前决定所有的变量和函数声明都在什么位置，这样在执行期间就可以少花些力气来解析标识符
+---
+### Bad Points
+
 - 如果 引擎 在代码中发现一个 eval(..) 或 with，它实质上就不得不 假定 自己知道的所有的标识符的位置可能是无效的，因为它不可能在词法分析时就知道你将会向eval(..)传递什么样的代码来修改词法作用域，或者你可能会向with传递的对象有什么样的内容来创建一个新的将被查询的词法作用域
+---
+### 函数中的作用域
+
+```javascript
+function foo(a) {
+	var b = 2;
+
+	// 一些代码
+
+	function bar() {
+		// ...
+	}
+
+	// 更多代码
+
+	var c = 3;
+}
+
+bar(); 
+
+console.log( a, b, c ); 
+```
+---
+### 隐藏于普通作用域
+- least privilege principle
+- 拿你所编写的代码的任意一部分，在它周围包装一个函数声明，这实质上“隐藏”了这段代码
+
+---
+### Example
+```javascript
+function doSomething(a) {
+	b = a + doSomethingElse( a * 2 );
+	console.log( b * 3 );
+}
+function doSomethingElse(a) {
+	return a - 1;
+}
+var b;
+doSomething( 2 ); // 15
+```
+---
+## Better solution
+```javascript
+function doSomething(a) {
+	function doSomethingElse(a) {
+		return a - 1;
+	}
+	var b;
+	b = a + doSomethingElse( a * 2 );
+	console.log( b * 3 );
+}
+doSomething( 2 ); // 15
+```
+---
+## avoid conflict
+```javascript
+function foo() {
+	function bar(a) {
+		i = 3; 
+		console.log( a + i );
+	}
+
+	for (var i=0; i<10; i++) {
+		bar( i * 2 ); 
+	}
+}
+
+foo();
+```
+
+---
+### 函数作为作用域
+
+```javascript
+var a = 2;
+
+function foo() { // <-- 插入这个
+
+	var a = 3;
+	console.log( a ); // 3
+
+} // <-- 和这个
+foo(); // <-- 还有这个
+
+console.log( a ); // 2
+```
+- foo function dirty the window scope
+---
+## Better way
+```javascript
+var a = 2;
+
+(function foo(){ // <-- 插入这个
+
+	var a = 3;
+	console.log( a ); // 3
+
+})(); // <-- 和这个
+
+console.log( a ); // 2
+```
+- function expression
+- IIFE(Immediately Invoked Function Expression)
+
+---
+### 匿名函数和命名函数
+```javascript
+setTimeout( function(){
+	console.log("I waited 1 second!");
+}, 1000 );
+``` 
+```javascript
+setTimeout( function timeoutHandler(){ // <-- 看，我有一个名字！
+	console.log( "I waited 1 second!" );
+}, 1000 );
+```
+
+---
+### 块作为作用域
+```javascript
+for (var i=0; i<10; i++) {
+	console.log( i );
+}
+```
+```javascript
+var foo = true;
+if (foo) {
+	var bar = foo * 2;
+	bar = something( bar );
+	console.log( bar );
+}
+```
+- 表面上看来，JavaScript 没有块作用域的能力
+---
+- with
+- try/catch
+```javascript
+try {
+	undefined(); //用非法的操作强制产生一个异常！
+}
+catch (err) {
+	console.log( err ); // error！
+}
+console.log( err ); // ReferenceError: `err` not found
+```
+---
+### Let
+- let 关键字将变量声明附着在它所在的任何块（通常是一个 { .. }）的作用域中。换句话说，let 为它的变量声明隐含地劫持了任意块的作用域
+```javascript
+var foo = true;
+
+if (foo) {
+	let bar = foo * 2;
+	bar = something( bar );
+	console.log( bar );
+}
+
+console.log( bar ); 
+```
+---
+### 隐晦
+- 使用 let 将一个变量附着在一个现存的块上有些隐晦
+```javascript
+var foo = true;
+
+if (foo) {
+	{ // <-- 明确的块
+		let bar = foo * 2;
+		bar = something( bar );
+		console.log( bar );
+	}
+}
+
+console.log( bar ); // ReferenceError
+```
+---
+### const
+- const也创建一个块作用域变量，但是它的值是固定的（常量）。任何稍后改变它的企图都将导致错误
+```javascript
+var foo = true;
+
+if (foo) {
+	var a = 2;
+	const b = 3; // 存在于包含它的`if`作用域中
+
+	a = 3; // 没问题！
+	b = 4; // 错误！
+}
+
+console.log( a ); // 3
+console.log( b ); // ReferenceError!
+```
+

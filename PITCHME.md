@@ -82,5 +82,17 @@ foo( 2 );
 引擎：酷。传递 a 的值，也就是 2，给 log(..)
 ```
 ---
+### Little Test
+```javascript
+function foo(a) {
+	var b = a;
+	return a + b;
+}
 
+var c = foo( 2 );
+```
+- find all LHS search
+- find all RHS search
+
+---
 

@@ -46,8 +46,8 @@
 
 - LHS 和 RHS 意味着“赋值的左/右手边”未必像字面上那样意味着“ = 赋值操作符的左/右边”
 - 赋值有几种其他的发生形式，所以最好在概念上将它考虑为："赋值的目标(LHS)"和“赋值的源(RHS)"
-
-## Example
+---
+### Example
 ```javascript
 function foo(a) {
 	console.log( a ); // 2
@@ -55,7 +55,7 @@ function foo(a) {
 
 foo( 2 );
 ```
----
+
 ```
 引擎：嘿 作用域，我有一个 foo 的 RHS 引用。听说过它吗？
 

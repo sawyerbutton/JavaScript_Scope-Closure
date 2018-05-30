@@ -918,3 +918,33 @@ function foo(x) {
 var bar = foo(2); // bar 现在是一个闭包
 bar(10);
 ```
+---
+```javascript
+var data = [];
+
+for (var i = 0; i < 3; i++) {
+  data[i] = function () {
+    console.log(i);
+  };
+}
+
+data[0]();
+data[1]();
+data[2]();
+```
+---
+```javascript
+var data = [];
+
+for (var i = 0; i < 3; i++) {
+  data[i] = (function (i) {
+        return function(){
+            console.log(i);
+        }
+  })(i);
+}
+
+data[0]();
+data[1]();
+data[2]();
+```

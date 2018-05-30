@@ -446,6 +446,7 @@ console.log( err ); // ReferenceError: `err` not found
 ---
 ### Let
 - let 关键字将变量声明附着在它所在的任何块（通常是一个 { .. }）的作用域中。换句话说，let 为它的变量声明隐含地劫持了任意块的作用域
+
 ```javascript
 var foo = true;
 
@@ -492,4 +493,82 @@ if (foo) {
 console.log( a ); // 3
 console.log( b ); // ReferenceError!
 ```
+
+---
+### Hoisting 提升
+- 先有鸡还是先有蛋？
+
+```javascript
+a = 2;
+
+var a;
+
+console.log( a );
+```
+```javascript
+console.log( a );
+
+var a = 2;
+```
+---
+## function hoisting
+```javascript
+foo(); // 不是 ReferenceError， 而是 TypeError!
+
+var foo = function bar() {
+	// ...
+};
+```
+```javascript
+foo(); // TypeError
+bar(); // ReferenceError
+
+var foo = function bar() {
+	// ...
+};
+```
+---
+### Function first!
+```javascript
+foo(); 
+
+var foo;
+
+function foo() {
+	console.log( 1 );
+}
+
+foo = function() {
+	console.log( 2 );
+};
+```
+---
+## But 
+```javascript
+foo(); 
+function foo() {
+	console.log( 1 );
+}
+var foo = function() {
+	console.log( 2 );
+};
+function foo() {
+	console.log( 3 );
+}
+```
+```javascript
+foo(); // "b"
+var a = true;
+if (a) {
+   function foo() { console.log( "a" ); }
+}
+else {
+   function foo() { console.log( "b" ); }
+}
+```
+---
+### Conclusion
+- 在同一个作用域内的重复定义是一个十分差劲儿的主意，而且经常会导致令人困惑的结果。
+
+### Closure
 

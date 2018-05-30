@@ -1,15 +1,16 @@
-# JavaScript 认知系列 
+# 认知JavaScript  
 
 作用域和闭包(Scope and Closure)
 
 ---
 
-### Flux Design
+### 作用域
 
-- Dispatcher: Manages Data Flow
-- Stores: Handle State & Logic
-- Views: Render Data via React
+- 什么是作用域？
+- 语言的最基础模型之一就是在变量中存储值，并且在稍后取出或修改这些值的能力
+- 在变量中存储值和取出值的能力，给程序赋予状态这一概念
+- 引入变量之后，这些变量存活在哪里？
+-这些问题需要一组明确定义的规则，它定义如何在某些位置存储变量，以及如何在稍后找到这些变量。我们称这组规则为：作用域
 
 ---
 
-![Flux Explained](https://facebook.github.io/flux/img/flux-simple-f8-diagram-explained-1300w.png)

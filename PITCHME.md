@@ -460,6 +460,7 @@ console.log( bar );
 ---
 ### 隐晦
 - 使用 let 将一个变量附着在一个现存的块上有些隐晦
+
 ```javascript
 var foo = true;
 
@@ -476,6 +477,7 @@ console.log( bar ); // ReferenceError
 ---
 ### const
 - const也创建一个块作用域变量，但是它的值是固定的（常量）。任何稍后改变它的企图都将导致错误
+
 ```javascript
 var foo = true;
 

@@ -173,7 +173,7 @@ function foo(a) {
 	bar(b * 3);
 }
 
-foo( 2 ); // 2 4 12
+foo( 2 ); 
 ```
 
 ---
@@ -195,7 +195,7 @@ function foo(a) {
 	bar(b * 3);
 }
 
-foo( 2 ); // 2 4 12
+foo( 2 ); 
 ```
 ---
 - 如果在 bar(..) 内部和 foo(..) 内部都有一个 c，那么 console.log(..) 语句将会找到并使用 bar(..) 中的那一个，绝不会到达 foo(..) 中的那一个
@@ -214,7 +214,84 @@ window.a
 - eval
 - 欺骗词法作用域会导致更低下的性能
 ---
+## eval-1
+```javascript
+function foo(str, a) {
+	eval( str ); 
+	console.log( a, b );
+}
 
+var b = 2;
+
+foo( "var b = 3;", 1 ); 
+```
+---
+## eval-2
+```javascript
+function foo(str) {
+   "use strict";
+   eval( str );
+   console.log( a ); 
+}
+
+foo( "var a = 2" );
+```
+---
+## other ways
+```javascript
+setTimeout(s,..)
+setInterval(s,..)
+new Function(..,s)
+```
+---
+## with-1
+
+```javascript
+var obj = {
+	a: 1,
+	b: 2,
+	c: 3
+};
+
+//  重复“obj”显得更“繁冗”
+obj.a = 2;
+obj.b = 3;
+obj.c = 4;
+
+// “更简单”的缩写
+with (obj) {
+	a = 3;
+	b = 4;
+	c = 5;
+}
+```
+- 看起来还不错
+---
+## with-2
+
+```javascript
+function foo(obj) {
+	with (obj) {
+		a = 2;
+	}
+}
+
+var o1 = {
+	a: 3
+};
+
+var o2 = {
+	b: 3
+};
+
+foo( o1 );
+console.log( o1.a ); 
+
+foo( o2 );
+console.log( o2.a ); 
+console.log( a ); 
+```
+---
 ### Bad Points
 - JavaScript 引擎 在编译阶段期行许多性能优化工作。其中的一些优化原理都归结为实质上在进行词法分析时可以静态地分析代码，并提前决定所有的变量和函数声明都在什么位置，这样在执行期间就可以少花些力气来解析标识符
 - 如果 引擎 在代码中发现一个 eval(..) 或 with，它实质上就不得不 假定 自己知道的所有的标识符的位置可能是无效的，因为它不可能在词法分析时就知道你将会向eval(..)传递什么样的代码来修改词法作用域，或者你可能会向with传递的对象有什么样的内容来创建一个新的将被查询的词法作用域

@@ -1,0 +1,1 @@
+# JavaScript_Scope-Closure

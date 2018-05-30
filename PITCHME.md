@@ -1,6 +1,6 @@
-# Flux 
+# JavaScript 认知系列 
 
-An application architecture for React
+作用域和闭包(Scope and Closure)
 
 ---
 

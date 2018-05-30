@@ -643,7 +643,7 @@ function bar(fn) {
     }
     
     function bar() {
-    	fn(); // 看妈妈，我看到闭包了！
+    	fn(); // This is a closure
     }
     
     foo();
@@ -804,18 +804,15 @@ foo2.identify(); // "foo 2"
 ```javascript
 var MyModules = (function Manager() {
 	var modules = {};
-
 	function define(name, deps, impl) {
 		for (var i=0; i<deps.length; i++) {
 			deps[i] = modules[deps[i]];
 		}
 		modules[name] = impl.apply( impl, deps );
 	}
-
 	function get(name) {
 		return modules[name];
 	}
-
 	return {
 		define: define,
 		get: get
@@ -896,4 +893,28 @@ console.log(
 
 foo.awesome(); // LET ME INTRODUCE: HIPPO
 ```
+
 - 在 模块文件 内部的内容被视为像是包围在一个作用域闭包中，就像早先看到的使用函数闭包的模块那样
+---
+### Now Test
+```javascript
+function foo(x) {
+  var tmp = 3;
+  function bar(y) {
+    alert(x + y + (++tmp));
+  }
+  bar(10);
+}
+foo(2)
+```
+---
+```javascript
+function foo(x) {
+  var tmp = 3;
+  return function (y) {
+    alert(x + y + (++tmp));
+  }
+}
+var bar = foo(2); // bar 现在是一个闭包
+bar(10);
+```
